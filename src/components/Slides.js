@@ -3,7 +3,7 @@ import "react-responsive-carousel/lib/styles/carousel.css"
 
 const Slides = () => {
   return (
-    <div className="relative">
+    <div className="relative select-none">
       <div className="absolute w-full h-32 bg-gradient-to-t from-gray-100 to-transparent bottom-0 z-20" />
       <Carousel
         autoPlay={true}

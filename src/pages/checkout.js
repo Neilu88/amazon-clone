@@ -5,11 +5,29 @@ import CartItem from "../components/CartItem"
 import Header from "../components/Header"
 import { selectItems, selectTotal } from "../slices/basketSlice"
 import { signIn, signOut } from "next-auth/react"
+import { loadStripe } from "@stripe/stripe-js"
+import axios from "axios"
+const stripePromise = loadStripe(process.env.stripe_public_key)
 
 const Checkout = () => {
   const { data: session } = useSession()
   const items = useSelector(selectItems)
   const total = useSelector(selectTotal)
+  const createCheckoutSession = async () => {
+    const stripe = await stripePromise
+
+    // Call the backend
+    const checkoutSession = await axios.post("/api/create-checkout-session", {
+      items,
+      email: session.user.email,
+    })
+
+    const result = await stripe.redirectToCheckout({
+      sessionId: checkoutSession.data.id,
+    })
+    if (result.error) alert(result.error.message)
+  }
+
   return (
     <div className="bg-gray-100">
       <Header />
@@ -53,7 +71,9 @@ const Checkout = () => {
                 <span className="font-bold truncate"> ${total.toFixed(2)}</span>
               </h2>
               <button
-                disabled
+                role="link"
+                onClick={createCheckoutSession}
+                disabled={!session}
                 className={`button mt-2 ${
                   !session &&
                   "from-gray-300 to-gray-500 border-gray-200 text-gray-300 cursor-not-allowed"

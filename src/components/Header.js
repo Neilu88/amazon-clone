@@ -77,7 +77,7 @@ const Header = () => {
       </div>
 
       {/* Nav Menu */}
-      <div className="select-none flex items-center p-2 pl-6 space-x-3 bg-amazon_blue-light text-white text-sm">
+      <div className="select-none flex items-center whitespace-nowrap overflow-x-scroll p-2 pl-6 space-x-3 bg-amazon_blue-light text-white text-sm">
         <p className="flex link items-center">
           <MenuIcon className="w-6 mr-1" />
           All
